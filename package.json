@@ -1,0 +1,33 @@
+{
+  "name": "coupon-api",
+  "version": "1.0.0",
+  "description": "An API for coupon app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theaniket/coupon-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "passport",
+    "coupons"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theaniket/coupon-api/issues"
+  },
+  "homepage": "https://github.com/theaniket/coupon-api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "sqlite3": "^4.0.2"
+  }
+}
