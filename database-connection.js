@@ -42,7 +42,8 @@ const deal = sequelize.define('deal',{
     },
     hotDeal: Sequelize.BOOLEAN,
     discountPercent: Sequelize.INTEGER,
-    buyOneGetOne: Sequelize.BOOLEAN
+    buyOneGetOne: Sequelize.BOOLEAN,
+    expiresOn: Sequelize.DATE
 })
 
 vendor.hasMany(product, {foreignKey: 'fk_vendorId', sourceKey: 'vendorId'});
