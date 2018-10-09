@@ -1,10 +1,8 @@
 const router = require('express').Router();
 const vendor = require('../database-connection').vendor;
 const passport = require('passport');
-const jwt = require('passport-jwt');
 require('../passport-setup')(passport);
 const getToken = require('../utilities/getToken');
-const sequelize = require('../database-connection').sequelize;
 
 router.get('/all',(req,res)=>{
     passport.authenticate('jwt', {session: false},async (err, user, info) => {

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('coupon-api',null,null,{
     dialect: 'sqlite',
-    storage: './data/data.db'
+    storage: './storage/data.db'
 });
 
 const user = sequelize.define('User',{

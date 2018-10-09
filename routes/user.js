@@ -11,8 +11,6 @@ router.post('/signup',async (req,res)=>{
     const admin = req.body.admin;
     const isVerified = req.body.isVerified;
 
-    const hashedPassword = passwordHash.generate(password);
-
     if(!phoneNumber|| !password){
         res.send({
             success: false,
@@ -21,30 +19,42 @@ router.post('/signup',async (req,res)=>{
     }
 
     else{
-        const newUser = await user.build({
-            phoneNumber: phoneNumber,
-            password: hashedPassword,
-            isVerified: isVerified,
-            admin: admin
-        }).save();
-        console.log(newUser.dataValues.userId);
-        res.send({
-            success: true,
-            message: 'Please Log In!'
+        const isUser = await user.findOne({
+            where:{
+                phoneNumber: phoneNumber
+            }
         })
+
+        console.log(user);
+
+        if(isUser){
+            res.send({success: false, message: "Phone Number already exists"});
+        }else{
+            const newUser = await user.build({
+                phoneNumber: phoneNumber,
+                password: password,
+                isVerified: isVerified,
+                admin: admin
+            }).save();
+            newUser.save();
+            res.send({
+                success: true,
+                message: 'Please Log In!'
+            })
+        }
+        
     }
 })
 
 router.post('/signin', async (req,res)=>{
-    const phonenumber = req.body.phonenumber;
+    const phoneNumber = req.body.phoneNumber;
     const x = await user.findOne({
         where:{
-            phoneNumber: phonenumber
+            phoneNumber: phoneNumber
         }
     }).then((user)=>{
         const password = req.body.password;
-        const hashedPassword = passwordHash.generate(password);
-        if(user.password == hashedPassword){
+        if(user.password == password){
             let token = jwt.sign(user.toJSON(),secret,{expiresIn: '30m'});
             if(user.isVerified){
                 res.json({success: true, token: 'JWT ' + token});
@@ -57,7 +67,8 @@ router.post('/signin', async (req,res)=>{
             res.json({success: false, messagee: 'Invalid Password'});
         }
     }).catch((err)=>{
-        res.send({success: false, message: 'Inavlid Credentials'});
+        console.log(err);
+        res.send({success: false, message: err});
     })
 })
 
