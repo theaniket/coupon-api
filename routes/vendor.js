@@ -20,11 +20,12 @@ router.get('/all',(req,res)=>{
 
 router.get('/byname/:name',(req,res)=>{
     passport.authenticate('jwt', {session: false},async (err, user, info) => {
+        const name = req.params.name;
         let token = getToken(req.headers);
     if(token){
         const vendors = await vendor.findAll({
             where:{
-                vendorName:req.params.name
+                vendorName: name
             }
         });
         res.send({success:true, vendors: vendors});
@@ -36,11 +37,12 @@ router.get('/byname/:name',(req,res)=>{
 
 router.post('/add',(req,res)=>{
     passport.authenticate('jwt', {session: false},async (err,user,info)=>{
+        const vendorName = req.body.vendorName;
         let token = getToken(req.headers);
         if(token){
 
             const newVendor = await vendor.create({
-                vendorName: req.body.vendorName
+                vendorName: vendorName
             }).catch((err)=>{
                 res.send({success: false, message: err});
             });

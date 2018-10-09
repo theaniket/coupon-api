@@ -1,4 +1,4 @@
-const secret = 'go7 tcwg 87h3w7th b3h5euybhyuhbn';
+const secret = "I've got a feelin', a feelin' deep inside, oh! yeah";
 
 module.exports = {
     secret

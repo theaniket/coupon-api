@@ -3,10 +3,15 @@ const user = require('../database-connection').user;
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 const secret = require('../configs/jwt-config').secret;
+const passwordHash = require('password-hash');
 
 router.post('/signup',async (req,res)=>{
     const phoneNumber = req.body.phoneNumber;
     const password = req.body.password;
+    const admin = req.body.admin;
+    const isVerified = req.body.isVerified;
+
+    const hashedPassword = passwordHash.generate(password);
 
     if(!phoneNumber|| !password){
         res.send({
@@ -18,8 +23,9 @@ router.post('/signup',async (req,res)=>{
     else{
         const newUser = await user.build({
             phoneNumber: phoneNumber,
-            password: password,
-            isVerified: true
+            password: hashedPassword,
+            isVerified: isVerified,
+            admin: admin
         }).save();
         console.log(newUser.dataValues.userId);
         res.send({
@@ -30,14 +36,22 @@ router.post('/signup',async (req,res)=>{
 })
 
 router.post('/signin', async (req,res)=>{
+    const phonenumber = req.body.phonenumber;
     const x = await user.findOne({
         where:{
-            phoneNumber: req.body.phoneNumber
+            phoneNumber: phonenumber
         }
     }).then((user)=>{
-        if(user.password == req.body.password){
+        const password = req.body.password;
+        const hashedPassword = passwordHash.generate(password);
+        if(user.password == hashedPassword){
             let token = jwt.sign(user.toJSON(),secret,{expiresIn: '30m'});
-            res.json({success: true, token: 'JWT ' + token});
+            if(user.isVerified){
+                res.json({success: true, token: 'JWT ' + token});
+            }else{
+                res.json({success: false, message: "Please! Verify phonenumber."})
+            }
+            
         }
         else{
             res.json({success: false, messagee: 'Invalid Password'});

@@ -14,6 +14,7 @@ const user = sequelize.define('User',{
         primaryKey: true
     },
     isVerified: Sequelize.BOOLEAN,
+    admin: Sequelize.BOOLEAN
 });
 
 const vendor = sequelize.define('Vendor',{
@@ -32,6 +33,7 @@ const product  = sequelize.define('Product',{
         primaryKey: true
     },
     productName: Sequelize.STRING,
+    price: Sequelize.INTEGER
 })
 
 const deal = sequelize.define('deal',{
